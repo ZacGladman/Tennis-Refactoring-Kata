@@ -21,34 +21,46 @@ public class TennisGame1 implements TennisGame {
     }
 
     public String getScore() {
-        String score = "";
+        String score;
         if (playerOneScore == playerTwoScore) {
-            score = switch (playerOneScore) {
-                case 0 -> "Love-All";
-                case 1 -> "Fifteen-All";
-                case 2 -> "Thirty-All";
-                default -> "Deuce";
-            };
+            score = getEqualScore(playerOneScore);
         } else if (playerOneScore >= 4 || playerTwoScore >= 4) {
-            int minusResult = playerOneScore - playerTwoScore;
-            if (minusResult == 1) {
-                score = "Advantage player1";
-            } else if (minusResult == -1) {
-                score = "Advantage player2";
-            } else if (minusResult >= 2) {
-                score = "Win for player1";
-            } else {
-                score = "Win for player2";
-            }
+            score = getWinnerOrAdvantage(playerOneScore, playerTwoScore);
         } else {
-            score += getOnePlayersScore(playerOneScore);
-            score += "-";
-            score += getOnePlayersScore(playerTwoScore);
+            score = getDefaultScore();
         }
         return score;
     }
 
-    public String getOnePlayersScore(int score) {
+    public String getWinnerOrAdvantage(int playerOneScore, int playerTwoScore) {
+        String score;
+        int minusResult = playerOneScore - playerTwoScore;
+        if (minusResult == 1) {
+            score = "Advantage player1";
+        } else if (minusResult == -1) {
+            score = "Advantage player2";
+        } else if (minusResult >= 2) {
+            score = "Win for player1";
+        } else {
+            score = "Win for player2";
+        }
+        return score;
+    }
+
+    public String getEqualScore(int score) {
+        return switch (score) {
+            case 0 -> "Love-All";
+            case 1 -> "Fifteen-All";
+            case 2 -> "Thirty-All";
+            default -> "Deuce";
+        };
+    }
+
+    public String getDefaultScore() {
+        return getSinglePlayersScore(playerOneScore) + "-" + getSinglePlayersScore(playerTwoScore);
+    }
+
+    public String getSinglePlayersScore(int score) {
         return switch (score) {
             case 0 -> "Love";
             case 1 -> "Fifteen";
